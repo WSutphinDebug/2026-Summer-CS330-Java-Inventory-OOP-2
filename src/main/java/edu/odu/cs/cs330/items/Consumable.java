@@ -1,5 +1,7 @@
 package edu.odu.cs.cs330.items;
 
+import java.util.Objects;
+
 /**
  * This class represents one Consumable Item--as found in most video games.
  * This includes food.
@@ -26,7 +28,7 @@ public class Consumable extends Item {
         "  Nme: %s%n",
         "  Eft: %s%n",
         "  Use: %d%n"
-    );
+    ); 
 
     /**
      * The effect "buff" or "debuff" that is received when using this item.
@@ -45,7 +47,6 @@ public class Consumable extends Item {
     public Consumable()
     {
         super("[Placeholder]");
-
         this.effect = "";
         this.uses   = 0;
     }
@@ -100,7 +101,7 @@ public class Consumable extends Item {
     public int requiredNumberOfValues()
     {
         // What is the correct return value?
-        return -1;
+        return 3;
     }
 
     @Override
@@ -109,6 +110,8 @@ public class Consumable extends Item {
         this.setName(tokens[0]);
 
         // Complete this method.
+        this.setEffect(tokens[1]);
+        this.setNumberOfUses(Integer.parseInt(tokens[2]));
     }
 
     /**
@@ -120,6 +123,9 @@ public class Consumable extends Item {
         Consumable cpy = new Consumable();
         
         // Add the missing logic
+        cpy.name = super.name;
+        cpy.setEffect(this.getEffect());
+        cpy.setNumberOfUses(this.getNumberOfUses());
 
         return cpy;
     }
@@ -138,6 +144,13 @@ public class Consumable extends Item {
 
         Consumable rhsItem = (Consumable) rhs;
 
+        if(!(this.name.equals(rhsItem.name))){
+            return false;
+        }
+        else if(!(this.getEffect().equals(rhsItem.getEffect()))){
+            return false;
+        }
+
         // Maybe this equals method is a hint... that can be used as a guide...
         return this.name.equals(rhsItem.name)
             && this.effect.equals(rhsItem.effect);
@@ -153,7 +166,7 @@ public class Consumable extends Item {
     public int hashCode()
     {
         // Replace the return
-        return -1;
+        return Objects.hash(this.name, this.getEffect());
     }
 
     /**
@@ -163,6 +176,9 @@ public class Consumable extends Item {
     public String toString()
     {
         // Use String.format and the provided FMT_STR
-        return "  Not Implemented";
+        return String.join(
+            System.lineSeparator(),
+            String.format(FMT_STR, super.getName(), this.getEffect(), this.getNumberOfUses())
+            );
     }
 }

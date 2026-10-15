@@ -43,8 +43,9 @@ public class Armour extends Equippable {
     public Armour()
     {
         super();
+        this.setDurability(0);
 
-        this.defense = 0;
+        this.defense = 0; 
     }
 
     /**
@@ -71,7 +72,8 @@ public class Armour extends Equippable {
     public int requiredNumberOfValues()
     {
         // What is the correct return value?
-        return -1;
+        //determines size of the tokens array for fromtokens, needs to account for every data field 
+        return 7;
     }
 
     @Override
@@ -80,6 +82,12 @@ public class Armour extends Equippable {
         this.setName(tokens[0]);
 
         // Add the missing lines
+        this.setMaterial(tokens[1]);
+        this.setDurability(Integer.parseInt(tokens[2]));
+        this.setDefense(Integer.parseInt(tokens[3]));
+        this.setModifier(tokens[4]);
+        this.setModifierLevel(Integer.parseInt(tokens[5]));
+        this.setElement(tokens[6]);
 
     }
 
@@ -89,8 +97,17 @@ public class Armour extends Equippable {
     @Override
     public Item clone()
     {
+        Armour cpy = new Armour();
+        cpy.name = super.name;
+        cpy.setDurability(this.getDurability());
+        cpy.setMaterial(this.getMaterial());
+        cpy.setModifier(this.getModifier());
+        cpy.setModifierLevel(this.getModifierLevel());
+        cpy.setElement(this.getElement());
+        cpy.setDefense(this.getDefense());
+
         // Replace the return
-        return new Armour();
+        return cpy;
     }
 
     /**
@@ -105,11 +122,30 @@ public class Armour extends Equippable {
         if (!(rhs instanceof Armour)) {
             return false;
         }
-
+        Armour lhs = this;
         Armour rhsItem = (Armour) rhs;
 
-        // Replace this return
-        return false;
+        if(!(lhs.name.equals(rhsItem.name))){
+            return false;
+        }
+        else if(!(lhs.getModifier().equals(rhsItem.getModifier()))){
+            return false;
+        }
+        else if(!(lhs.getMaterial().equals(rhsItem.getMaterial()))){
+            return false;
+        }
+        else if(lhs.getModifierLevel() != rhsItem.getModifierLevel()){
+            return false;
+        }
+        else if(!(lhs.getElement().equals(rhsItem.getElement()))){
+            return false;
+        }
+        else if(lhs.getDefense() != rhsItem.getDefense()){
+            return false;
+        }
+
+        
+        return lhs.name.equals(rhsItem.name);
 
     }
 
@@ -121,7 +157,7 @@ public class Armour extends Equippable {
     public int hashCode()
     {
         // Replace this return
-        return -1;
+        return Objects.hash(this.name, this.getMaterial(), this.getModifier(), this.getModifierLevel(), this.getElement(), this.getDefense());
     }
 
     /**
@@ -131,7 +167,12 @@ public class Armour extends Equippable {
     public String toString()
     {
         // Use String.format and the provided FMT_STR
-        return "  Not Implemented";
+        return String.join(
+            System.lineSeparator(),
+            String.format(FMT_STR, super.getName(), this.getDurability(), this.getDefense(), this.getMaterial(), this.getModifier(), 
+            this.getModifierLevel(), this.getElement())
+            
+        );
     }
 }
 
